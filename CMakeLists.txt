@@ -6,3 +6,4 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 add_executable(aoc_2023_01 src/day_01/main.cpp)
+add_executable(aoc_2023_02 src/day_02/main.cpp)

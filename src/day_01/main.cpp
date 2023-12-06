@@ -35,9 +35,7 @@ size_t extract_line_with_digits(const std::string_view line)
 
 size_t process(const std::string_view input, const auto& line_extract)
 {
-    auto line_nums = std::views::split(input, '\n') | std::views::transform([&](const auto& substr) -> size_t {
-        return line_extract(std::string_view { substr });
-    });
+    auto line_nums = std::views::split(input, '\n') | std::views::transform(quxflux::as_string_view) | std::views::transform(line_extract);
     return std::ranges::fold_left(line_nums, size_t { 0 }, std::plus {});
 }
 
@@ -83,8 +81,7 @@ size_t calculate_part_2(const std::string_view input)
 
 int main()
 {
-    const auto input = quxflux::read_file(
-        std::filesystem::path(__FILE__).parent_path() / "input.txt");
+    const auto input = QUXFLUX_GET_INPUT();
 
     std::cout << calculate_part_1(input) << std::endl;
     std::cout << calculate_part_2(input) << std::endl;
