@@ -6,6 +6,9 @@
 #include <string>
 
 namespace quxflux {
+
+inline bool is_digit(const char c) { return std::isdigit(c); }
+
 inline std::string read_file(const std::filesystem::path& path)
 {
     std::ifstream file(path);

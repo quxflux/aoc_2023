@@ -20,15 +20,13 @@ const std::map<std::string_view, size_t> num_map {
     { "nine", 9 }
 };
 
-bool is_digit(const char c) { return std::isdigit(c); }
-
 size_t extract_line_with_digits(const std::string_view line)
 {
     if (line.empty())
         return 0;
 
-    const auto first = std::ranges::find_if(line, &is_digit);
-    const auto last = std::ranges::find_if(line | std::views::reverse, &is_digit);
+    const auto first = std::ranges::find_if(line, &quxflux::is_digit);
+    const auto last = std::ranges::find_if(line | std::views::reverse, &quxflux::is_digit);
 
     return std::stoi(std::string { *first }) * 10 + std::stoi(std::string { *last });
 }
@@ -39,7 +37,7 @@ size_t process(const std::string_view input, const auto& line_extract)
     return std::ranges::fold_left(line_nums, size_t { 0 }, std::plus {});
 }
 
-size_t calculate_part_1(const std::string_view input)
+size_t part_1(const std::string_view input)
 {
     return process(input, extract_line_with_digits);
 }
@@ -53,11 +51,11 @@ size_t extract_line_with_digits_and_words(const std::string_view line)
 
     std::map<size_t, size_t> pos_and_values;
 
-    const auto first_digit = std::ranges::find_if(line, &is_digit);
+    const auto first_digit = std::ranges::find_if(line, &quxflux::is_digit);
     if (first_digit != line.end())
         pos_and_values[std::distance(line.begin(), first_digit)] = std::stoi(std::string { *first_digit });
 
-    const auto last_digit = std::ranges::find_if(reversed_line, &is_digit);
+    const auto last_digit = std::ranges::find_if(reversed_line, &quxflux::is_digit);
     if (last_digit != reversed_line.end())
         pos_and_values[line.size() - std::distance(reversed_line.begin(), last_digit)] = std::stoi(std::string { *last_digit });
 
@@ -73,7 +71,7 @@ size_t extract_line_with_digits_and_words(const std::string_view line)
     return pos_and_values.begin()->second * 10 + pos_and_values.rbegin()->second;
 }
 
-size_t calculate_part_2(const std::string_view input)
+size_t part_2(const std::string_view input)
 {
     return process(input, extract_line_with_digits_and_words);
 }
@@ -83,8 +81,8 @@ int main()
 {
     const auto input = QUXFLUX_GET_INPUT();
 
-    std::cout << calculate_part_1(input) << std::endl;
-    std::cout << calculate_part_2(input) << std::endl;
+    std::cout << part_1(input) << std::endl;
+    std::cout << part_2(input) << std::endl;
 
     return 0;
 }
