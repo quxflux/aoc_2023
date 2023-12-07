@@ -109,19 +109,28 @@ almanac read_almanac()
     return result;
 }
 
+size_t solve_for_seeds(auto&& seeds, const std::span<const almanac::mapping> mappings)
+{
+    constexpr auto min_f = [](const auto lhs, const auto rhs) { return std::min(lhs, rhs); };
+    return std::ranges::fold_left_first(seeds | std::views::transform([=](const auto seed) { return resolve_seed(mappings, seed); }), min_f).value();
+}
+
 size_t part_1()
 {
     const auto almanac = read_almanac();
-    return std::ranges::fold_left_first(
-        almanac.seeds
-            | std::views::transform([&](const auto seed) { return resolve_seed(almanac.mappings, seed); }),
-        [](const auto lhs, const auto rhs) { return std::min(lhs, rhs); })
-        .value();
+    return solve_for_seeds(almanac.seeds, almanac.mappings);
 }
 
 size_t part_2()
 {
-    return 0;
+    const auto almanac = read_almanac();
+
+    auto seeds = almanac.seeds
+        | std::views::chunk(2)
+        | std::views::transform([](const auto idx_pair) { return std::views::iota(idx_pair.front(), idx_pair.front() + idx_pair.back()); })
+        | std::views::join;
+
+    return solve_for_seeds(seeds, almanac.mappings);
 }
 
 } // namespace
