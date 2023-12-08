@@ -1,14 +1,5 @@
 #include "../util.h"
 
-#include <fstream>
-#include <functional>
-#include <iostream>
-#include <map>
-#include <ranges>
-#include <regex>
-#include <spanstream>
-#include <string>
-
 namespace {
 
 enum class card_label {

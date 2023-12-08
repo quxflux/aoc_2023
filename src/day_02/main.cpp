@@ -1,14 +1,10 @@
 #include "../util.h"
 
-#include <fstream>
-#include <functional>
-#include <iostream>
 #include <map>
-#include <ranges>
-#include <regex>
-#include <string>
+#include <spanstream>
 
 namespace {
+
 struct draw {
     std::string color;
     size_t quantity;
@@ -19,36 +15,26 @@ struct game {
     std::vector<std::vector<draw>> draws;
 };
 
-game parse_game(std::string_view line)
+game parse_game(const std::string_view line)
 {
-    const std::string t { line };
-
     game g;
 
-    {
-        const std::regex game_regex { R"(Game (\d+): )" };
-        const std::sregex_iterator it { t.begin(), t.end(), game_regex };
+    constexpr std::string_view prefix { "Game " };
 
-        g.id = std::stoul((*it)[1]);
-        line = line.substr((*it)[0].length());
-    }
+    size_t offset = std::string_view { "Game" }.length();
+    offset += static_cast<size_t>((std::ispanstream(line.substr(offset)) >> g.id).tellg()) + 1;
 
-    {
-        const std::regex draw_regex { R"(\s*(\d+) ([a-z]+))" };
+    for (const auto game_str : std::views::split(line.substr(offset), ';') | std::views::transform(quxflux::as_string_view)) {
+        std::vector<draw> draws;
 
-        for (const auto game_str : std::views::split(line, ';') | std::views::transform(quxflux::as_string_view)) {
-            std::vector<draw> draws;
+        for (const auto draw_sv : std::views::split(game_str, ',') | std::views::transform(quxflux::as_string_view)) {
 
-            for (const auto draw_sv : std::views::split(game_str, ',') | std::views::transform(quxflux::as_string_view)) {
-
-                const std::string draw_str { draw_sv };
-                const std::sregex_iterator it { draw_str.begin(), draw_str.end(), draw_regex };
-
-                draws.push_back(draw { .color = (*it)[2], .quantity = std::stoul((*it)[1]) });
-            }
-
-            g.draws.emplace_back(std::move(draws));
+            draw d;
+            std::ispanstream { draw_sv } >> d.quantity >> d.color;
+            draws.push_back(d);
         }
+
+        g.draws.emplace_back(std::move(draws));
     }
 
     return g;

@@ -1,13 +1,9 @@
 #include "../util.h"
 
-#include <fstream>
-#include <functional>
-#include <iostream>
 #include <map>
-#include <ranges>
-#include <string>
 
 namespace {
+
 const std::map<std::string_view, size_t> num_map {
     { "one", 1 },
     { "two", 2 },
@@ -31,15 +27,15 @@ size_t extract_line_with_digits(const std::string_view line)
     return std::stoi(std::string { *first }) * 10 + std::stoi(std::string { *last });
 }
 
-size_t process(const std::string_view input, const auto& line_extract)
+size_t process_input(const auto& line_extract)
 {
-    auto line_nums = std::views::split(input, '\n') | std::views::transform(quxflux::as_string_view) | std::views::transform(line_extract);
+    auto line_nums = QUXFLUX_GET_INPUT() | std::views::split('\n') | std::views::transform(quxflux::as_string_view) | std::views::transform(line_extract);
     return std::ranges::fold_left(line_nums, size_t { 0 }, std::plus {});
 }
 
-size_t part_1(const std::string_view input)
+size_t part_1()
 {
-    return process(input, extract_line_with_digits);
+    return process_input(extract_line_with_digits);
 }
 
 size_t extract_line_with_digits_and_words(const std::string_view line)
@@ -71,18 +67,16 @@ size_t extract_line_with_digits_and_words(const std::string_view line)
     return pos_and_values.begin()->second * 10 + pos_and_values.rbegin()->second;
 }
 
-size_t part_2(const std::string_view input)
+size_t part_2()
 {
-    return process(input, extract_line_with_digits_and_words);
+    return process_input(extract_line_with_digits_and_words);
 }
 } // namespace
 
 int main()
 {
-    const auto input = QUXFLUX_GET_INPUT();
-
-    std::cout << part_1(input) << std::endl;
-    std::cout << part_2(input) << std::endl;
+    std::cout << part_1() << std::endl;
+    std::cout << part_2() << std::endl;
 
     return 0;
 }

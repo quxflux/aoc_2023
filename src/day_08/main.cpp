@@ -1,12 +1,8 @@
 #include "../util.h"
 
 #include <cassert>
-#include <functional>
-#include <iostream>
 #include <map>
 #include <numeric>
-#include <ranges>
-#include <string>
 
 namespace {
 
