@@ -48,7 +48,7 @@ field classify(const char c)
 {
     if (c == '.')
         return field::empty;
-    if (std::isdigit(c))
+    if (quxflux::is_digit(c))
         return field::digit;
 
     return field::sign;

@@ -63,8 +63,8 @@ almanac read_almanac()
 
     result.seeds = { std::from_range,
         lines.front()
-            | std::views::chunk_by([](const auto lhs, const auto rhs) { return std::isdigit(lhs) == std::isdigit(rhs); }) //
-            | std::views::filter([](const auto& t) { return std::isdigit(t.front()); }) //
+            | std::views::chunk_by([](const auto lhs, const auto rhs) { return quxflux::is_digit(lhs) == quxflux::is_digit(rhs); }) //
+            | std::views::filter([](const auto& t) { return quxflux::is_digit(t.front()); }) //
             | std::views::transform([](const auto& t) { return std::stoul(std::string { t.begin(), t.end() }); }) };
 
     const std::vector mapping_descriptors {
