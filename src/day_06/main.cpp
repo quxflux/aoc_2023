@@ -1,7 +1,5 @@
 #include <aoc23/util.h>
 
-#include <map>
-
 namespace {
 
 struct race {
@@ -35,7 +33,7 @@ constexpr auto calculate_min_max_winning_time(const race& r)
     const auto min_wait_time = std::ranges::partition_point(start_times, std::not_fn(beats_distance));
     const auto max_wait_time = std::ranges::partition_point(start_times, beats_distance);
 
-    return std::pair { *min_wait_time, *std::prev(max_wait_time) };
+    return std::pair { *min_wait_time, *(max_wait_time - 1) };
 }
 
 constexpr auto get_num_winning_start_times(const race& r)

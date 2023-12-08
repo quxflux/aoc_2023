@@ -1,5 +1,7 @@
 #include <aoc23/util.h>
 
+#include <utility>
+
 namespace {
 
 enum class card_label {
