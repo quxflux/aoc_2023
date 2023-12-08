@@ -1,4 +1,4 @@
-#include "../util.h"
+#include <aoc23/util.h>
 
 #include <set>
 
