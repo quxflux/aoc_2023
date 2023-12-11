@@ -18,5 +18,10 @@ foreach(day RANGE 24)
         SET(EXECUTABLE ${PROJECT_NAME_${day}})
         add_executable(${EXECUTABLE} ${PROJECT_DIR_${day}}/main.cpp)
         target_include_directories(${EXECUTABLE} PRIVATE src/common)
+
+        if (APPLE)
+            # better debug data visualizer on OSX with CLion
+            target_compile_options(${EXECUTABLE} PRIVATE -gdwarf-3)
+        endif()
     endif()
 endforeach()

@@ -24,6 +24,12 @@ inline std::string read_file(const std::filesystem::path& path)
     return oss.str();
 }
 
+template <template <typename...> typename Container, std::ranges::input_range Range>
+auto from_range(Range&& r)
+{
+    return Container<std::ranges::range_value_t<Range>> { std::ranges::begin(r), std::ranges::end(r) };
+}
+
 }
 
 #define QUXFLUX_GET_INPUT() [] { const static auto str = quxflux::read_file(std::filesystem::path(__FILE__).parent_path() / "input.txt"); \
