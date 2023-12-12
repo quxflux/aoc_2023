@@ -18,8 +18,7 @@ foreach(day RANGE 24)
         SET(EXECUTABLE ${PROJECT_NAME_${day}})
 
         file(GLOB SRC_FILES ${PROJECT_DIR_${day}}/*.cpp ${PROJECT_DIR_${day}}/*.h)
-        add_executable(${EXECUTABLE} ${SRC_FILES}
-                src/day_10/map.h)
+        add_executable(${EXECUTABLE} ${SRC_FILES})
         target_include_directories(${EXECUTABLE} PRIVATE src/common)
 
         if (APPLE)
