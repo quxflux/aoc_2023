@@ -34,11 +34,7 @@ namespace {
             return std::ranges::find(map_values, c, &std::pair<char, field>::first)->second;
         };
 
-        auto lines = quxflux::from_range<std::vector>(QUXFLUX_GET_INPUT() | std::views::split('\n') | std::views::transform(as_string_view));
-
-        map<field> m(lines.size(), lines.front().size());
-        std::ranges::transform(lines | std::views::join, m.data().begin(), map_element);
-        return m;
+        return read_map<field>(QUXFLUX_GET_INPUT(), map_element);
     }
 
     using position = std::pair<ptrdiff_t, ptrdiff_t>;
