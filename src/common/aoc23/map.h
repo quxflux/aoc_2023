@@ -29,12 +29,12 @@ struct map {
     {
     }
 
-    [[nodiscard]] constexpr T& operator[](const size_t row, const size_t col)
+    [[nodiscard]] constexpr T& operator()(const size_t row, const size_t col)
     {
         return data_[row * cols_ + col];
     }
 
-    [[nodiscard]] constexpr const T& operator[](const size_t row, const size_t col) const
+    [[nodiscard]] constexpr const T& operator()(const size_t row, const size_t col) const
     {
         return data_[row * cols_ + col];
     }

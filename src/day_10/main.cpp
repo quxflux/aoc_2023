@@ -66,7 +66,7 @@ namespace {
     {
         std::vector<std::vector<position>> found_paths_to_start;
 
-        const auto current_value = m[current_pos.first, current_pos.second];
+        const auto current_value = m(current_pos.first, current_pos.second);
 
         if (current_value == field::start)
             found_paths_to_start.push_back({ current_pos });
@@ -107,7 +107,7 @@ namespace {
 
         const auto [start_row, start_col] = *std::ranges::find_if(indices, [&](const auto indices) {
             const auto [row, col] = indices;
-            return m[row, col] == field::start;
+            return m(row, col) == field::start;
         });
 
         std::set<std::pair<ptrdiff_t, ptrdiff_t>> visited;
@@ -120,14 +120,14 @@ namespace {
         std::ranges::fill(up_scaled.data(), field::none);
 
         for (const auto [r, c] : index_view(m)) {
-            const auto t = m[r, c];
+            const auto t = m(r, c);
 
             if (t == field::none)
                 continue;
 
-            up_scaled[r * 3, c * 3] = field::start;
+            up_scaled(r * 3, c * 3) = field::start;
             for (const auto [d_r, d_c] : possible_neighbors(t))
-                up_scaled[r * 3 + d_r, c * 3 + d_c] = field::start;
+                up_scaled(r * 3 + d_r, c * 3 + d_c) = field::start;
         }
 
         return up_scaled;
@@ -139,12 +139,12 @@ namespace {
         std::ranges::fill(down_scaled.data(), field::none);
 
         for (const auto [r, c] : index_view(down_scaled)) {
-            const auto t = m[r * 3, c * 3];
+            const auto t = m(r * 3, c * 3);
 
             if (t == field::none)
                 continue;
 
-            down_scaled[r, c] = t;
+            down_scaled(r, c) = t;
         }
 
         return down_scaled;
@@ -159,10 +159,10 @@ namespace {
             const auto pos = stack.top();
             stack.pop();
 
-            if (m[pos.first, pos.second] != field::none)
+            if (m(pos.first, pos.second) != field::none)
                 continue;
 
-            m[pos.first, pos.second] = fill_value;
+            m(pos.first, pos.second) = fill_value;
 
             for (const auto delta_pos : std::to_array<position>({ { -1, 0 }, { 1, 0 }, { 0, -1 }, { 0, 1 } })) {
                 const auto offset_pos = position { pos.first + delta_pos.first, pos.second + delta_pos.second };
@@ -171,7 +171,7 @@ namespace {
                     offset_pos.second < 0 || offset_pos.second >= m.cols())
                     continue;
 
-                if (m[offset_pos.first, offset_pos.second] != field::none)
+                if (m(offset_pos.first, offset_pos.second) != field::none)
                     continue;
 
                 stack.push(offset_pos);
@@ -193,9 +193,9 @@ namespace {
 
         std::ranges::fill(masked_map.data(), field::none);
         for (const auto [r, c] : loop)
-            masked_map[r, c] = input_map[r, c];
+            masked_map(r, c) = input_map(r, c);
 
-        masked_map[loop.front().first, loop.front().second] = field::SW;
+        masked_map(loop.front().first, loop.front().second) = field::SW;
 
         map up_scaled = scale_up(masked_map);
 

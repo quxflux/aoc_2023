@@ -31,14 +31,14 @@ namespace {
 
     auto col_view(auto& m, const size_t col_idx)
     {
-        return std::views::iota(size_t { 0 }, m.rows()) | std::views::transform([&m, col_idx](const auto& row) -> auto& { return m[row, col_idx]; });
+        return std::views::iota(size_t { 0 }, m.rows()) | std::views::transform([&m, col_idx](const auto& row) -> auto& { return m(row, col_idx); });
     }
 
     auto calculate_galaxy_positions(const map<field>& m)
     {
         std::vector<position> galaxy_positions;
         std::ranges::copy(index_view(m) //
-                | std::views::filter([&](const position& pos) { return m[pos.first, pos.second] == field::galaxy; }),
+                | std::views::filter([&](const position& pos) { return m(pos.first, pos.second) == field::galaxy; }),
             std::back_inserter(galaxy_positions));
 
         return galaxy_positions;
@@ -96,7 +96,7 @@ namespace {
 
         for (const auto [dst_row, src_row] : std::views::enumerate(combined_rows))
             for (const auto [dst_col, src_col] : std::views::enumerate(combined_cols))
-                expanded[dst_row, dst_col] = m[src_row, src_col];
+                expanded(dst_row, dst_col) = m(src_row, src_col);
 
         return expanded;
     }
